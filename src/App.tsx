@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-do
 import TrialDivision from "./components/TrialDivision.tsx";
 import PolardP1 from "./components/PolardP1.tsx";
 import PolardRho from "./components/PolardRho.tsx";
+import QuadraticSieve from "./components/QuadraticSieve.tsx";
 
 function App() {
   return (
@@ -70,7 +71,7 @@ function App() {
                             <Route path="/trial" element={<TrialDivision/>}/>
                             <Route path="/polard-p-1" element={<PolardP1 />} />
                             <Route path="/polard-rho" element={<PolardRho />}/>
-                            <Route path="/quadratic-sieve" element={<div>Quadratic Sieve Yok</div>}/>
+                            <Route path="/quadratic-sieve" element={<QuadraticSieve />}/>
                             <Route path="/gnfs" element={<div>GNFS Yok</div>}/>
                         </Routes>
                     </div>
