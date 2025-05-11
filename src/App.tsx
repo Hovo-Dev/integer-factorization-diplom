@@ -3,6 +3,7 @@ import TrialDivision from "./components/TrialDivision.tsx";
 import PolardP1 from "./components/PolardP1.tsx";
 import PolardRho from "./components/PolardRho.tsx";
 import QuadraticSieve from "./components/QuadraticSieve.tsx";
+import GNFS from "./components/GNFS.tsx";
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
             <Router>
                 <div className="w-full min-h-screen" style={{ backgroundColor: '#181818' }}>
                     <nav className="shadow-md">
-                        <div className="flex items-center justify-between px-[20px] py-[12px]">
+                        <div className="flex items-center justify-between px-[20px] pt-[5px]">
                             <NavLink to="/" style={{ color: 'white' }} end className="text-[20px] no-underline font-bold">
                                 Factorization
                             </NavLink>
@@ -72,7 +73,7 @@ function App() {
                             <Route path="/polard-p-1" element={<PolardP1 />} />
                             <Route path="/polard-rho" element={<PolardRho />}/>
                             <Route path="/quadratic-sieve" element={<QuadraticSieve />}/>
-                            <Route path="/gnfs" element={<div>GNFS Yok</div>}/>
+                            <Route path="/gnfs" element={<GNFS />}/>
                         </Routes>
                     </div>
                 </div>

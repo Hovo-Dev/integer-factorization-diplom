@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { BlockMath } from 'react-katex';
 import { gcd } from "../utils/gcd.ts";
 import { isPrime } from "../utils/prime.ts";
 
-function PollardRho() {
+function GNFSAlgorithm() {
     const [input, setInput] = useState('');
     const [visibleSteps, setVisibleSteps] = useState<string[]>([]);
     const [animating, setAnimating] = useState(false);
@@ -17,7 +17,7 @@ function PollardRho() {
         setAnimating(true);
 
         const interval = setInterval(() => {
-            setVisibleSteps(prev => [...prev, steps[i-1]]);
+            setVisibleSteps((prev) => [...prev, steps[i - 1]]);
             scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
             i++;
             if (i >= steps.length) {
@@ -31,64 +31,47 @@ function PollardRho() {
         let d = 2;
         while (d * d <= n) {
             while (n % d === 0) {
-                steps.push(`\\color{white} { \\text{Trial division: } ${n} \\div ${d} = ${n / d} }`);
+                steps.push(`\\color{white} {\\text{Trial division: } ${n} \\div ${d} = ${n / d}}`);
                 collected.push(d);
                 n /= d;
             }
             d++;
         }
         if (n > 1) {
-            steps.push(`\\color{white} { \\text{Remaining prime factor: } ${n} }`);
+            steps.push(`\\color{white} {\\text{Remaining prime factor: } ${n}}`);
             collected.push(n);
         }
     };
 
-    const rhoStep = (n: number): [number | null, number | null, string[]] => {
-        let steps: string[] = [];
-        let x = 2;
-        let y = 2;
-        let c = 1;
-        let d = 1;
+    const simulateGNFS = (n: number, steps: string[]): [number | null, number | null] => {
+        steps.push(`\\color{white}{\\text{GNFS is best suited for very large numbers (100+ digits)}}`);
+        steps.push(`\\color{white}{\\text{In practice, GNFS uses polynomial selection, sieving, relation collection, and linear algebra}}`);
 
-        const f = (x: number) => (x * x + c) % n;
-
-        steps.push(`\\color{white}{\\text{Starting Pollard's Rho with } x_0 = 2,\ c = 1,\ f(x) = x^2 + ${c} \mod ${n}}`);
-
-        while (d === 1) {
-            x = f(x);
-            y = f(f(y));
-            d = gcd(Math.abs(x - y), n);
-
-            steps.push(`\\color{white}{ x = ${x},\ y = ${y},\ \gcd(\\lvert x - y \\rvert, ${n}) = ${d} }`);
-
-            if (d === n) {
-                steps.push(`\\color{white} { \\text{ Cycle detected with no factor found, try different } c} `);
-                return [null, null, steps];
-            }
+        // Placeholder to demonstrate basic factor attempt
+        if (n % 2 === 0) {
+            return [2, n / 2];
         }
 
-        steps.push(`\\text{\\color{green}{Found non-trivial factor: }} \\color{white} { d = ${d} }`);
-        return [d, n / d, steps];
+        return [null, null];
     };
 
     const fullFactor = (n: number, steps: string[] = [], collected: number[] = []) => {
         if (isPrime(n)) {
-            steps.push(`\\color{white} { \\text{${n} is prime → added to list} }`);
+            steps.push(`\\color{white} {\\text{${n} is prime → added to list}}`);
             collected.push(n);
             return;
         }
 
         if (n < 100) {
-            steps.push(`\\color{white} { \\text{ Switching to trial division for small number } ${n} }`);
+            steps.push(`\\color{white} {\\text{Switching to trial division for small number } ${n}}`);
             trialDivide(n, steps, collected);
             return;
         }
 
-        const [factor, cofactor, s] = rhoStep(n);
-        steps.push(...s);
+        const [factor, cofactor] = simulateGNFS(n, steps);
 
         if (!factor) {
-            steps.push(`\\color{red} { \\text{ ❌ Rho failed on ${n}} }, \\color{red} { \\text{ Switching to trial division } }`);
+            steps.push(`\\color{red} {\\text{❌ GNFS simulation failed}}, \\color{white}{\\text{Switching to trial division}}`);
             trialDivide(n, steps, collected);
             return;
         }
@@ -108,7 +91,7 @@ function PollardRho() {
         Array.from(counts.entries())
             .sort((a, b) => b[0] - a[0])
             .forEach(([prime, count]) => {
-                terms.push(count === 1 ? `\\color{white} { ${prime} }` : `\\color{white} { ${prime}^{${count}} }`);
+                terms.push(count === 1 ? `\\color{white}{${prime}}` : `\\color{white}{${prime}^{${count}}}`);
             });
         return terms.join(' \\times ');
     };
@@ -122,13 +105,13 @@ function PollardRho() {
     };
 
     return (
-        <div className="pt-[10px] text-gray-800 font-mono">
-            <div className="flex flex-col items-center max-w-2xl mx-auto bg-white shadow-xl rounded-lg">
-                <h1 className="text-[28px] font-bold mb-[5px] text-center" style={{color: 'white'}}>
-                    Pollard's Rho
+        <div className="bg-black p-[24px] text-gray-800 font-mono">
+            <div className="flex flex-col items-center max-w-2xl mx-auto bg-white shadow-2xl rounded-2xl p-[24px]">
+                <h1 className="text-[28px] font-bold mb-[16px] text-center" style={{color: 'white'}}>
+                    GNFS Algorithm
                 </h1>
 
-                <form className="flex w-[400px] gap-[8px] mb-[10px]">
+                <form className="flex w-[400px] gap-[8px] mb-[20px]">
                     <input
                         type="number"
                         className="outline-none border border-gray-300 rounded px-[12px] py-[8px] w-full sm:w-auto"
@@ -148,7 +131,7 @@ function PollardRho() {
                 {/* 🔁 Step-by-step LaTeX */}
                 <div
                     ref={scrollRef}
-                    className="bg-slate-50 overflow-y-auto scroll-auto max-h-[72vh] space-y-[5px] text-[14px]"
+                    className="bg-slate-50 p-[16px] overflow-y-auto max-h-[350px] space-y-[10px] text-[14px]"
                 >
                     {visibleSteps.map((latex, idx) => (
                         <BlockMath key={idx}>{latex}</BlockMath>
@@ -157,8 +140,8 @@ function PollardRho() {
 
                 {/* 🧮 Final Factor Result */}
                 {factors.length > 0 && !animating && (
-                    <div className="text-center">
-                        <p className="text-[18px]" style={{color: 'white'}}>✅ Prime Factors Found:</p>
+                    <div className="text-center mt-[16px]">
+                        <p className="text-[18px] mb-[4px]" style={{color: 'white'}}>✅ Prime Factors Found:</p>
                         <BlockMath>{formatFactorProduct(factors)}</BlockMath>
                     </div>
                 )}
@@ -167,4 +150,4 @@ function PollardRho() {
     );
 }
 
-export default PollardRho;
+export default GNFSAlgorithm;

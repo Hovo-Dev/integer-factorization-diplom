@@ -11,3 +11,7 @@
 a {
   color: inherit;
 }
+
+body {
+  @apply overscroll-y-none;
+}
