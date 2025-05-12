@@ -111,8 +111,14 @@ function QuadraticSieve() {
                         steps.push(`\\color{white}{\\gcd(x - y, n) = \\gcd(${xVal - y}, ${n}) = ${d1}}`);
                         steps.push(`\\color{white}{\\gcd(x + y, n) = \\gcd(${xVal + y}, ${n}) = ${d2}}`);
 
-                        if (d1 !== 1 && d1 !== n) return [d1, n / d1];
-                        if (d2 !== 1 && d2 !== n) return [d2, n / d2];
+                        if (d1 !== 1 && d1 !== n) {
+                            steps.push(`\\color{white}{\\text{Գտանք բաժանարար: } ${d1}}`);
+                            return [d1, n / d1];
+                        }
+                        if (d2 !== 1 && d2 !== n) {
+                            steps.push(`\\color{white}{\\text{Գտանք բաժանարար: } ${d2}}`);
+                            return [d2, n / d2];
+                        }
 
                         steps.push(`\\color{red}{\\text{❌ GCD-ն տրիվիալ է, ֆակտոր չի գտնվել}}`);
                         return [null, null];
@@ -128,7 +134,7 @@ function QuadraticSieve() {
 
     const fullFactor = (n: number, steps: string[] = [], collected: number[] = []) => {
         if (isPrime(n)) {
-            steps.push(`\\color{white} {\\text{${n} is prime → added to list}}`);
+            steps.push(`\\color{white} {\\text{${n} պարզ թիվ է → ավելացնում ենք ցուցակին}}`);
             collected.push(n);
             return;
         }
@@ -139,6 +145,7 @@ function QuadraticSieve() {
             return;
         }
 
+        steps.push(`\\color{white}{\\text{ Փորձում ենք ֆակտորիզացնել ${n}-ը օգտագործելով Quadratic Sieve}}`);
         const [factor, cofactor] = qsPaperStyle(n, steps);
 
         if (!factor) {
