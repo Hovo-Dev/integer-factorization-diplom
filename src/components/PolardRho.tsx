@@ -124,14 +124,14 @@ function PollardRho() {
     return (
         <div className="pt-[10px] text-gray-800 font-mono">
             <div className="flex flex-col items-center max-w-2xl mx-auto bg-white shadow-xl rounded-lg">
-                <h1 className="text-[28px] font-bold mb-[5px] text-center" style={{color: 'white'}}>
+                <h1 className="text-[28px] font-bold mb-[15px] text-center" style={{color: 'white'}}>
                     Pollard's Rho
                 </h1>
 
-                <form className="flex w-[400px] gap-[8px] mb-[10px]">
+                <form className="flex w-[400px] h-[45px] gap-[8px] mb-[10px]">
                     <input
                         type="number"
-                        className="outline-none border border-gray-300 rounded px-[12px] py-[8px] w-full sm:w-auto"
+                        className="outline-none border border-gray-300 rounded px-[12px] py-[8px] text-[22px] w-full sm:w-auto"
                         placeholder="Enter a number"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
@@ -148,7 +148,7 @@ function PollardRho() {
                 {/* 🔁 Step-by-step LaTeX */}
                 <div
                     ref={scrollRef}
-                    className="bg-slate-50 overflow-y-auto scroll-auto max-h-[72vh] space-y-[5px] text-[14px]"
+                    className="bg-slate-50 overflow-y-auto scroll-auto max-h-[72vh] space-y-[5px] text-[18px]"
                 >
                     {visibleSteps.map((latex, idx) => (
                         <BlockMath key={idx}>{latex}</BlockMath>
@@ -158,7 +158,7 @@ function PollardRho() {
                 {/* 🧮 Final Factor Result */}
                 {factors.length > 0 && !animating && (
                     <div className="text-center">
-                        <p className="text-[18px]" style={{color: 'white'}}>✅ Prime Factors Found:</p>
+                        <p className="text-[26px]" style={{color: 'white'}}>✅ Գտանք պարզ արտադրիչներ:</p>
                         <BlockMath>{formatFactorProduct(factors)}</BlockMath>
                     </div>
                 )}

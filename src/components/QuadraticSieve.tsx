@@ -47,8 +47,8 @@ function QuadraticSieve() {
         const B = 40;
         const factorBase = [2, 3, 5, 7, 11, 13, 17, 23, 29, 31, 37];
 
-        steps.push(`\\color{white}{\\textbf{Քայլ 1.} \\text{ Ընտրում ենք ֆակտորային բազա՝ B = ${B} }}`);
-        steps.push(`\\color{white}{\\text{Օգտագործվող ֆակտոր բազան են՝ } ${factorBase.join(', ')}}`);
+        steps.push(`\\color{white}{\\textbf{Քայլ 1.} \\text{ Ընտրում ենք B-smooth՝ B = ${B} }}`);
+        steps.push(`\\color{white}{\\text{Օգտագործվող պարզ թվերն են՝ } ${factorBase.join(', ')}}`);
 
         const xVals = Array.from({ length: 10_000 }, (_, i) => i + 1);
         const relations: { x: number; q: number; exponents: number[] }[] = [];
@@ -73,9 +73,6 @@ function QuadraticSieve() {
                 const newRelation = { x, q, exponents: exp };
                 relations.push(newRelation);
                 steps.push(`\\color{white}{Q(${x}) = ${q} \\quad \\text{→ B-հարթ}}`);
-
-                // Try combining with previously collected relations
-                const newMod2 = mod2(exp);
 
                 for (let i = 0; i < relations.length - 1; i++) {
                     const candidate = relations[i];
@@ -105,7 +102,7 @@ function QuadraticSieve() {
                         steps.push(`\\color{white}{y = \\sqrt{${r1.q} × ${r2.q}} = ${y}}`);
 
                         // Step 4: Compute GCDs
-                        steps.push(`\\color{white}{\\textbf{Քայլ 4.} \\text{ Հաշվում ենք GCD }}`);
+                        steps.push(`\\color{white}{\\textbf{Քայլ 4.} \\text{ Հաշվում ենք ամենամեծ ընդհանուր բաժանարարը }}`);
                         const d1 = gcd(xVal - y, n);
                         const d2 = gcd(xVal + y, n);
                         steps.push(`\\color{white}{\\gcd(x - y, n) = \\gcd(${xVal - y}, ${n}) = ${d1}}`);
@@ -145,7 +142,7 @@ function QuadraticSieve() {
             return;
         }
 
-        steps.push(`\\color{white}{\\text{ Փորձում ենք ֆակտորիզացնել ${n}-ը օգտագործելով Quadratic Sieve}}`);
+        steps.push(`\\color{white}{\\text{ Փորձում ենք գտնել ${n}-ի բաժանարարները օգտագործելով Quadratic Sieve}}`);
         const [factor, cofactor] = qsPaperStyle(n, steps);
 
         if (!factor) {
@@ -185,14 +182,14 @@ function QuadraticSieve() {
     return (
         <div className="pt-[10px] text-gray-800 font-mono">
             <div className="flex flex-col items-center max-w-2xl mx-auto bg-white shadow-xl rounded-lg">
-                <h1 className="text-[28px] font-bold mb-[5px] text-center" style={{color: 'white'}}>
+                <h1 className="text-[28px] font-bold mb-[15px] text-center" style={{color: 'white'}}>
                     Quadratic Sieve
                 </h1>
 
-                <form className="flex w-[400px] gap-[8px] mb-[10px]">
+                <form className="flex w-[400px] h-[35px] gap-[8px] mb-[10px]">
                     <input
                         type="number"
-                        className="outline-none border border-gray-300 rounded px-[12px] py-[8px] w-full sm:w-auto"
+                        className="outline-none border border-gray-300 rounded px-[12px] py-[8px] text-[20px] w-full sm:w-auto"
                         placeholder="Enter a number"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
@@ -209,7 +206,7 @@ function QuadraticSieve() {
                 {/* 🔁 Step-by-step LaTeX */}
                 <div
                     ref={scrollRef}
-                    className="bg-slate-50 overflow-y-auto scroll-auto max-h-[72vh] space-y-[5px] text-[14px]"
+                    className="bg-slate-50 overflow-y-auto scroll-auto max-h-[72vh] space-y-[5px] text-[18px]"
                 >
                     {visibleSteps.map((latex, idx) => (
                         <BlockMath key={idx}>{latex}</BlockMath>
@@ -219,7 +216,7 @@ function QuadraticSieve() {
                 {/* 🧮 Final Factor Result */}
                 {factors.length > 0 && !animating && (
                     <div className="text-center">
-                        <p className="text-[18px]" style={{color: 'white'}}>✅ Prime Factors Found:</p>
+                        <p className="text-[26px]" style={{color: 'white'}}>✅ Գտանք պարզ արտադրիչներ:</p>
                         <BlockMath>{formatFactorProduct(factors)}</BlockMath>
                     </div>
                 )}
