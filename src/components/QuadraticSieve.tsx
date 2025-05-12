@@ -44,15 +44,13 @@ function QuadraticSieve() {
     };
 
     const qsPaperStyle = (n: number, steps: string[]): [number | null, number | null] => {
-        const B = 10;
-        const factorBase = [2, 3, 5, 7];
-        const m = Math.floor(Math.sqrt(n));
+        const B = 40;
+        const factorBase = [2, 3, 5, 7, 11, 13, 17, 23, 29, 31, 37];
 
-        steps.push(`\\color{white}{\\textbf{Քայլ 1.} \\quad Ընտրում ենք ֆակտորային բազա՝ B = ${B}}`);
+        steps.push(`\\color{white}{\\textbf{Քայլ 1.} \\text{ Ընտրում ենք ֆակտորային բազա՝ B = ${B} }}`);
         steps.push(`\\color{white}{\\text{Օգտագործվող ֆակտոր բազան են՝ } ${factorBase.join(', ')}}`);
-        steps.push(`\\color{white}{\\text{Հաշվում ենք } m = \\lfloor \\sqrt{${n}} \\rfloor = ${m}}`);
 
-        const xVals = [m + 1, m + 2, m + 3];
+        const xVals = Array.from({ length: 10_000 }, (_, i) => i + 1);
         const relations: { x: number; q: number; exponents: number[] }[] = [];
 
         for (const x of xVals) {
@@ -80,22 +78,57 @@ function QuadraticSieve() {
             return [null, null];
         }
 
-        steps.push(`\\color{white}{\\textbf{Քայլ 2.} \\quad Կառուցում ենք էքսպոնենտ վեկտորները}`);
+        steps.push(`\\color{white}{\\textbf{Քայլ 2.} \\text{ Կառուցում ենք էքսպոնենտ վեկտորները }}`);
         relations.forEach(r => {
             steps.push(`\\color{white}{Q(${r.x}) = ${r.q} \\Rightarrow (${r.exponents.join(', ')})}`);
         });
 
-        steps.push(`\\color{white}{\\textbf{Քայլ 3.} \\quad Գտնում ենք մոդ 2 սուբավալյանտ վեկտորներ}`);
-        const sumExp = relations[0].exponents.map((e, i) => (e + relations[1].exponents[i]) % 2);
-        steps.push(`\\color{white}{(${relations[0].exponents.join(', ')}) + (${relations[1].exponents.join(', ')}) \\mod 2 = (${sumExp.join(', ')})}`);
+        // Step 3: Find a valid pair of relations whose exponent vectors mod 2 cancel out
+        steps.push(`\\color{white}{\\textbf{Քայլ 3.} \\text{ Գտնում ենք մոդ 2 վեկտորներ }}`);
+        let pair: [typeof relations[0], typeof relations[0]] | null = null;
 
-        steps.push(`\\color{white}{\\textbf{Քայլ 4.} \\quad Հաշվում ենք x և y}`);
-        const x = relations[0].x * relations[1].x;
-        const y = Math.floor(Math.sqrt(relations[0].q * relations[1].q));
-        steps.push(`\\color{white}{x = ${relations[0].x} × ${relations[1].x} = ${x}}`);
-        steps.push(`\\color{white}{y = √(${relations[0].q} × ${relations[1].q}) = ${y}}`);
+        for (let i = 0; i < relations.length; i++) {
+            for (let j = i + 1; j < relations.length; j++) {
+                const sum = relations[i].exponents.map(
+                    (e, k) => (e + relations[j].exponents[k]) % 2
+                );
+                if (sum.every(val => val === 0)) {
+                    pair = [relations[i], relations[j]];
+                    break;
+                }
+            }
+            if (pair) break;
+        }
 
-        steps.push(`\\color{white}{\\textbf{Քայլ 5.} \\quad Հաշվում ենք GCD}`);
+        if (!pair) {
+            steps.push(`\\color{red}{\\text{❌ Չհաջողվեց գտնել մոդ 2 զույգ հարաբերություն}}`);
+            return [null, null];
+        }
+
+        // Step 4: Calculate the vectors mod2
+        const [r1, r2] = pair;
+        const sumExp = r1.exponents.map((e, i) => (e + r2.exponents[i]) % 2);
+        steps.push(`\\color{white}{(${r1.exponents.join(', ')}) + (${r2.exponents.join(', ')}) \\mod 2 = (${sumExp.join(', ')})}`);
+
+        steps.push(`\\color{white}{\\textbf{Քայլ 4.} \\text{ Հաշվում ենք x և y արժեքները }}`);
+
+        // Step 5: Calculate x and y values
+        const x = r1.x * r2.x;
+        const ySquared = r1.q * r2.q;
+        const sqrtY = Math.sqrt(ySquared);
+
+        if (!Number.isInteger(sqrtY)) {
+            steps.push(`\\color{red}{\\text{❌ Q₁ × Q₂ = ${ySquared} չի հանդիսանում կատարյալ քառակուսի}}`);
+            return [null, null];
+        }
+
+        const y = sqrtY;
+        steps.push(`\\color{white}{x = ${r1.x} × ${r2.x} = ${x}}`);
+        steps.push(`\\color{white}{y = \\sqrt{${r1.q} × ${r2.q}} = ${y}}`);
+
+        steps.push(`\\color{white}{\\textbf{Քայլ 5.} \\text{ Հաշվում ենք GCD }}`);
+
+        // Step 6: Calculate GCD using pre-computed values
         const d1 = gcd(x - y, n);
         const d2 = gcd(x + y, n);
         steps.push(`\\color{white}{\\gcd(x - y, n) = \\gcd(${x - y}, ${n}) = ${d1}}`);
@@ -105,7 +138,6 @@ function QuadraticSieve() {
         if (d2 !== 1 && d2 !== n) return [d2, n / d2];
 
         steps.push(`\\color{red}{\\text{❌ GCD-ն տրիվիալ է, ֆակտոր չի գտնվել}}`);
-
         return [null, null];
     };
 
@@ -174,6 +206,7 @@ function QuadraticSieve() {
                         onChange={(e) => setInput(e.target.value)}
                     />
                     <button
+                        type="button"
                         disabled={animating}
                         onClick={() => handleFactor(Number(input))}
                         className="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-[20px] py-[8px] rounded-xl shadow-lg transition-all"
