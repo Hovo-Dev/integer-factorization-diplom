@@ -142,7 +142,7 @@ function QuadraticSieve() {
             return;
         }
 
-        steps.push(`\\color{white}{\\text{ Փորձում ենք գտնել ${n}-ի բաժանարարները օգտագործելով Quadratic Sieve}}`);
+        steps.push(`\\color{white}{\\text{ Փորձում ենք գտնել ${n}-ի բաժանարարները օգտագործելով Քառակուսային ցանցի ալգորիթմը}}`);
         const [factor, cofactor] = qsPaperStyle(n, steps);
 
         if (!factor) {
