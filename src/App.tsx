@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, NavLink, Navigate } from "react-router-dom";
 import TrialDivision from "./components/TrialDivision.tsx";
 import PolardP1 from "./components/PolardP1.tsx";
 import PolardRho from "./components/PolardRho.tsx";
@@ -63,6 +63,7 @@ function App() {
                             <Route path="/polard-p-1" element={<PolardP1 />} />
                             <Route path="/polard-rho" element={<PolardRho />}/>
                             <Route path="/quadratic-sieve" element={<QuadraticSieve />}/>
+                            <Route path="*" element={<Navigate to="/trial" replace />} />
                         </Routes>
                     </div>
                 </div>
