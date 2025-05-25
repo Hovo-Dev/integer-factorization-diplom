@@ -24,7 +24,7 @@ function PollardRho() {
                 clearInterval(interval);
                 setAnimating(false);
             }
-        }, 800);
+        }, 400);
     };
 
     const trialDivide = (n: number, steps: string[], collected: number[]) => {

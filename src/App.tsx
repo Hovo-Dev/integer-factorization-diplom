@@ -3,7 +3,6 @@ import TrialDivision from "./components/TrialDivision.tsx";
 import PolardP1 from "./components/PolardP1.tsx";
 import PolardRho from "./components/PolardRho.tsx";
 import QuadraticSieve from "./components/QuadraticSieve.tsx";
-import GNFS from "./components/GNFS.tsx";
 
 function App() {
   return (
@@ -54,15 +53,6 @@ function App() {
                                 >
                                     Quadratic Sieve
                                 </NavLink>
-                                <NavLink
-                                    to="/gnfs"
-                                    style={{ color: 'white' }}
-                                    className={({ isActive }) =>
-                                        `${isActive ? 'underline text-yellow-300' : 'text-white'} no-underline px-[12px] py-[8px] mr-[10px] transition`
-                                    }
-                                >
-                                    GNFS
-                                </NavLink>
                             </div>
                         </div>
                     </nav>
@@ -73,7 +63,6 @@ function App() {
                             <Route path="/polard-p-1" element={<PolardP1 />} />
                             <Route path="/polard-rho" element={<PolardRho />}/>
                             <Route path="/quadratic-sieve" element={<QuadraticSieve />}/>
-                            <Route path="/gnfs" element={<GNFS />}/>
                         </Routes>
                     </div>
                 </div>
